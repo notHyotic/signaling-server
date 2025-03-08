@@ -1,0 +1,178 @@
+openapi: 3.1.0
+info:
+  title: Signaling API
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+
+servers:
+  - url: http://api.example.com/v1
+    description: Optional server description, e.g. Main (production) server
+  - url: http://staging-api.example.com
+    description: Optional server description, e.g. Internal staging server for testing
+
+paths:
+  /livekit/roomCheck:
+    get:
+      summary: Check if a user is in a room.
+      description: Checks if a user is present in a given room.
+      parameters:
+        - name: roomName
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Room check result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roomExists:
+                    type: boolean
+                  usernameAvailable:
+                    type: boolean
+        "400":
+          description: Missing or invalid parameters
+  /livekit/generateTokenForHostRoom:
+    post:
+      summary: Generate a token for a host in a room.
+      description: Generates an authentication token for a user to host a specific room.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room:
+                  type: string
+                  description: The name of the room.
+                username:
+                  type: string
+                  description: The name of the user hosting the room.
+              required:
+                - room
+                - username
+      responses:
+        "200":
+          description: Token generated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The generated authentication token.
+        "400":
+          description: Invalid input, missing parameters.
+        "500":
+          description: Server error while generating the token.
+  /livekit/generateTokenForJoinRoom:
+    post:
+      summary: Generate a token for a user to join a room.
+      description: Generates an authentication token for a user to join a specific room.
+      operationId: generateTokenForJoinRoom
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room:
+                  type: string
+                  description: The name of the room.
+                  example: "conference-room-1"
+                username:
+                  type: string
+                  description: The name of the user joining the room.
+                  example: "john_doe"
+              required:
+                - room
+                - username
+              additionalProperties: false  # Disallow unevaluated properties
+      responses:
+        "200":
+          description: Token generated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The generated authentication token.
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  host:
+                    type: string
+                    description: Username of the host of the room.
+                    example: "host_user"
+                  participants:
+                    type: array
+                    description: List of users in the room.
+                    items:
+                      type: string
+                    example: ["user1", "user2", "user3"]
+        "400":
+          description: Invalid input, missing parameters, or extra properties.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message describing the invalid input.
+                    example: "Invalid input: extra properties not allowed"
+        "500":
+          description: Server error while generating the token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message describing the server error.
+                    example: "Internal server error while generating token"
+  /livekit/getUsersInRoom:
+    get:
+      summary: Get a list of users in a room.
+      description: Returns a list of usernames currently in the specified room.
+      parameters:
+        - name: room
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the room to retrieve users from.
+      responses:
+        "200":
+          description: Successfully retrieved the list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room:
+                    type: string
+                    description: The room name.
+                  users:
+                    type: array
+                    items:
+                      type: string
+                    description: A list of usernames currently in the room.
+        "400":
+          description: Missing or invalid parameters.
+        "500":
+          description: Server error while retrieving users.

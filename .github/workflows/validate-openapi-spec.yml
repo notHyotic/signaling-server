@@ -1,0 +1,30 @@
+name: Validate OpenAPI Specification
+
+on:
+  push:
+    paths:
+      - './openapi/openapi.yml'
+  pull_request:
+    paths:
+      - './openapi/openapi.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-openapi:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Swagger CLI
+      run: |
+        npm install -g swagger-cli
+
+    - name: Validate OpenAPI spec
+      run: |
+        swagger-cli validate ./openapi/openapi.yml
+
+    - name: Check validation result
+      if: failure()
+      run: exit 1

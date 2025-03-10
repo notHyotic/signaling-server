@@ -8,7 +8,7 @@ import (
 
 func (Ops) Tfapply() {
 	var rnr = sys.Runner().WithEnv(map[string]string{
-		"PWD": "./infrastructure",
+		"PWD": "./infrastructure/aws",
 	})
 
 	defer rnr.Close()

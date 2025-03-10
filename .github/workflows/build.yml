@@ -52,7 +52,7 @@ jobs:
           aws-region: 'us-east-1' # specify your region
 
       - name: Terraform
-        working-directory: ./infrastructure
+        working-directory: ./infrastructure/aws
         run: |
           terraform init
           terraform validate

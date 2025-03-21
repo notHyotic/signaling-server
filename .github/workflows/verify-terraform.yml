@@ -11,7 +11,7 @@ on:
 
 permissions:
   pull-requests: write  # Allows posting comments on PRs
-  contents: read        # Allows reading the repository contents
+  contents: write        # Allows reading the repository contents
 
 jobs:
   verify-terraform:

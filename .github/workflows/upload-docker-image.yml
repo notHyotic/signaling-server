@@ -18,3 +18,8 @@ jobs:
 
       - name: Build Docker Image
         run: docker build -t signaling-server .
+
+      - name: Login and Push Docker Image
+        run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker push ${{secrets.DOCKER_USERNAME}}/signaling-server

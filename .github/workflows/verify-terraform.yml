@@ -44,7 +44,6 @@ jobs:
         with:
           terraform-path: "./infrastructure/aws"
           api-key: ${{ secrets.PLURALITH_API_KEY }}
-          project-id: "signaling-server"
 
       # Run Pluralith to generate an infrastructure diagram and comment body
       - name: Pluralith Run

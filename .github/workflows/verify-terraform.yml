@@ -55,6 +55,11 @@ jobs:
           show-drift: true
           show-costs: true # Requires Infracost to be set up in your pipeline
 
+      - name: Move Comment File
+        run: |
+          find ./ -name "comment.md"
+          mv $(find ./ -name "comment.md") ./comment.md
+
       # Post the generated diagram as a GitHub comment
       - name: Pluralith Comment
         uses: Pluralith/actions/comment@v1.4.0

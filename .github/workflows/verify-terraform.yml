@@ -55,10 +55,9 @@ jobs:
           show-drift: true
           show-costs: true # Requires Infracost to be set up in your pipeline
 
-      - name: Move Comment File
+      - name: Debug Check
         run: |
-          find ./ -name "comment.md"
-          mv $(find ./ -name "comment.md") ./comment.md
+          ls -lah ./infrastructure/aws
 
       # Post the generated diagram as a GitHub comment
       - name: Pluralith Comment

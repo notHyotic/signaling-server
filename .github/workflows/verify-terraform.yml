@@ -8,7 +8,11 @@ on:
     branches:
       - main
   workflow_dispatch:
-  
+
+permissions:
+  pull-requests: write  # Allows posting comments on PRs
+  contents: read        # Allows reading the repository contents
+
 jobs:
   verify-terraform:
     runs-on: ubuntu-latest
